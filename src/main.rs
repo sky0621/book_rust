@@ -1,20 +1,52 @@
+use std::borrow::Borrow;
 use std::collections::HashMap;
+use std::process;
+
+fn separate<'a>(input: &'a String) -> Vec<&'static str> {
+    *input.split_ascii_whitespace().collect()
+}
 
 fn main() {
-    let mut cmdStore = HashMap::new();
-    cmdStore.insert("k1","v1");
-    println!("{:?}", cmdStore);
-
-    let mut input = String::new();
+    let mut cmd_store: HashMap<&str, &str> = HashMap::new();
     loop {
-        std::io::stdin().read_line(&mut input).unwrap();
-        input.retain(|c| c != '\n');
+        let mut input = String::new();
 
-        match input.as_str() {
-            "help" => usage(),
-            _ => println!(),
+        // 標準入力から input へ
+        std::io::stdin().read_line(&mut input).unwrap();
+
+        input.retain(|c| c != '\n'); // 改行コードの除去
+
+        let seps: Vec<&str> = separate(&input);
+        println!("{:?}", seps);
+
+        if seps.len() == 0 {
+            usage();
+            continue;
         }
-        input.clear();
+
+        match seps[0] {
+            // アプリ終了判定
+            "end" => {
+                println!("End");
+                process::exit(0);
+            }
+            // ヘルプ
+            "help" => usage(),
+            // 保存
+            "save" if seps.len() == 3 => {
+                let opt_key = seps.get(1).unwrap().clone();
+                println!("{:?}", opt_key);
+                // println!("{:?}", opt_key.unwrap());
+                &cmd_store.insert(opt_key, "test");
+            }
+            // "save" if seps.len() == 3 => cmd_store.insert(seps[1], seps[2]),
+            // // 取得
+            // "get" if seps.len() == 2 => cmd_store.get(seps[1]),
+            // // 削除
+            // "remove" if seps.len() == 2 => cmd_store.remove(seps[1]),
+            // その他
+            _ => usage(),
+        }
     }
 }
 
@@ -32,5 +64,5 @@ remove ... keyを渡してvalueを削除します。
 help   ... ヘルプ情報（当内容と同じ）を表示します。
 
     "#;
-    println!("{}",msg);
+    println!("{}", msg);
 }
