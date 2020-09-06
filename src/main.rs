@@ -1,24 +1,30 @@
-use std::borrow::Borrow;
-use std::collections::HashMap;
+use serde::{Deserialize, Serialize};
+use std::fs::File;
+use std::io::{stdin, Write};
 use std::process;
 
-fn separate<'a>(input: &'a String) -> Vec<&'static str> {
-    *input.split_ascii_whitespace().collect()
+#[derive(Serialize, Deserialize, Debug)]
+struct StoreInfo {
+    kvs: Vec<KV>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct KV {
+    key: String,
+    val: String,
 }
 
 fn main() {
-    let mut cmd_store: HashMap<&str, &str> = HashMap::new();
+    let mut store = File::create("store.json").expect("file not found");
     loop {
         let mut input = String::new();
 
         // 標準入力から input へ
-        std::io::stdin().read_line(&mut input).unwrap();
+        stdin().read_line(&mut input).unwrap();
 
         input.retain(|c| c != '\n'); // 改行コードの除去
 
-        let seps: Vec<&str> = separate(&input);
-        println!("{:?}", seps);
-
+        let seps: Vec<&str> = input.split_ascii_whitespace().collect();
         if seps.len() == 0 {
             usage();
             continue;
@@ -34,10 +40,14 @@ fn main() {
             "help" => usage(),
             // 保存
             "save" if seps.len() == 3 => {
-                let opt_key = seps.get(1).unwrap().clone();
-                println!("{:?}", opt_key);
-                // println!("{:?}", opt_key.unwrap());
-                &cmd_store.insert(opt_key, "test");
+                let si = StoreInfo {
+                    kvs: vec![KV {
+                        key: seps.get(1).unwrap().to_string(),
+                        val: seps.get(2).unwrap().to_string(),
+                    }],
+                };
+                let serialized = serde_json::to_string(&si).unwrap();
+                store.write_all(serialized.as_bytes());
             }
             // "save" if seps.len() == 3 => cmd_store.insert(seps[1], seps[2]),
             // // 取得
