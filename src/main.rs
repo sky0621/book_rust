@@ -1,13 +1,20 @@
+mod command;
+mod commands;
+mod save;
 mod store_info;
 
 use std::fs::OpenOptions;
 use std::io::{stdin, Write};
 use std::{fs, process};
 
+use crate::commands::Commands;
 use crate::store_info::StoreInfo;
 use std::collections::HashMap;
 
 fn main() {
+    let commands = Commands::new();
+
+    println!("Start!");
     loop {
         let mut input = String::new();
 
@@ -22,6 +29,8 @@ fn main() {
             usage();
             continue;
         }
+
+        commands.exec(seps);
 
         match seps[0] {
             // アプリ終了判定
