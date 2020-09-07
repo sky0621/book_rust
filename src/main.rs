@@ -1,10 +1,11 @@
 mod store_info;
 
 use std::fs::OpenOptions;
-use std::io::{stdin, Read, Write};
+use std::io::{stdin, Write};
 use std::{fs, process};
 
-use crate::store_info::{StoreInfo, KV};
+use crate::store_info::StoreInfo;
+use std::collections::HashMap;
 
 fn main() {
     loop {
@@ -34,19 +35,21 @@ fn main() {
 
             // 保存
             "save" if seps.len() == 3 => {
-                let mut kvs: Vec<KV> = vec![];
-                // 今回分をベクターに格納
-                kvs.push(KV::new(
+                let mut kvs: HashMap<String, String> = HashMap::new();
+                // 今回分をKVSに格納
+                kvs.insert(
                     seps.get(1).unwrap().to_string(),
                     seps.get(2).unwrap().to_string(),
-                ));
+                );
 
                 // JSONファイルから既存分を取得
                 let previous = fs::read_to_string("store.json").unwrap();
                 if !previous.is_empty() {
-                    // 既存分を今回分に続けてベクターに格納
-                    let mut saved_si: StoreInfo = serde_json::from_str(&previous).unwrap();
-                    kvs.append(saved_si.kvs.as_mut());
+                    // 既存分を今回分に続けてKVSに格納
+                    let saved_si: StoreInfo = serde_json::from_str(&previous).unwrap();
+                    for (k, v) in saved_si.kvs {
+                        kvs.insert(k, v);
+                    }
                 }
 
                 // JSONファイル書き込み用に文字列化
@@ -58,11 +61,25 @@ fn main() {
                     .truncate(true)
                     .open("store.json")
                     .unwrap();
-                store.write(serialized.as_bytes());
+                store.write(serialized.as_bytes()).unwrap();
             }
-            // "save" if seps.len() == 3 => cmd_store.insert(seps[1], seps[2]),
+
             // // 取得
-            // "get" if seps.len() == 2 => cmd_store.get(seps[1]),
+            "get" if seps.len() == 2 => {
+                // JSONファイルから既存分を取得
+                let previous = fs::read_to_string("store.json").unwrap();
+                if previous.is_empty() {
+                    println!();
+                    continue;
+                }
+                // 既存分を今回分に続けてベクターに格納
+                let saved_si: StoreInfo = serde_json::from_str(&previous).unwrap();
+                let v = saved_si
+                    .kvs
+                    .get(&*seps.get(1).unwrap().to_string())
+                    .unwrap();
+                println!("{}", v);
+            }
             // // 削除
             // "remove" if seps.len() == 2 => cmd_store.remove(seps[1]),
             // その他

@@ -1,22 +1,12 @@
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct StoreInfo {
-    pub(crate) kvs: Vec<KV>,
+    pub kvs: HashMap<String, String>,
 }
 impl StoreInfo {
-    pub fn new(kvs: Vec<KV>) -> StoreInfo {
+    pub fn new(kvs: HashMap<String, String>) -> StoreInfo {
         StoreInfo { kvs }
-    }
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct KV {
-    key: String,
-    val: String,
-}
-impl KV {
-    pub fn new(key: String, val: String) -> KV {
-        KV { key, val }
     }
 }
