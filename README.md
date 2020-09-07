@@ -8,6 +8,12 @@ $ cargo --version
 cargo 1.46.0 (149022b1d 2020-07-17)
 ```
 
+## Library
+### Serde ... JSON parser
+https://crates.io/crates/serde
+
+https://serde.rs/
+
 ## Recipe
 ### アプリ起動
 ```
