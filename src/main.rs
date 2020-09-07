@@ -64,7 +64,7 @@ fn main() {
                 store.write(serialized.as_bytes()).unwrap();
             }
 
-            // // 取得
+            // １件取得
             "get" if seps.len() == 2 => {
                 // JSONファイルから既存分を取得
                 let previous = fs::read_to_string("store.json").unwrap();
@@ -72,16 +72,59 @@ fn main() {
                     println!();
                     continue;
                 }
-                // 既存分を今回分に続けてベクターに格納
                 let saved_si: StoreInfo = serde_json::from_str(&previous).unwrap();
-                let v = saved_si
-                    .kvs
-                    .get(&*seps.get(1).unwrap().to_string())
-                    .unwrap();
-                println!("{}", v);
+                let v = saved_si.kvs.get(&*seps.get(1).unwrap().to_string());
+                println!("{}", v.unwrap_or(&mut String::from("")));
             }
-            // // 削除
-            // "remove" if seps.len() == 2 => cmd_store.remove(seps[1]),
+
+            // 全件取得
+            "list" => {
+                // JSONファイルから既存分を取得
+                let previous = fs::read_to_string("store.json").unwrap();
+                if previous.is_empty() {
+                    println!();
+                    continue;
+                }
+                let saved_si: StoreInfo = serde_json::from_str(&previous).unwrap();
+                for (k, v) in saved_si.kvs {
+                    println!("{{ {}, {} }}", k, v);
+                }
+            }
+
+            // １件削除
+            "remove" if seps.len() == 2 => {
+                // JSONファイルから既存分を取得
+                let previous = fs::read_to_string("store.json").unwrap();
+                if previous.is_empty() {
+                    println!();
+                    continue;
+                }
+                let mut saved_si: StoreInfo = serde_json::from_str(&previous).unwrap();
+                saved_si.kvs.remove(&*seps.get(1).unwrap().to_string());
+
+                // JSONファイル書き込み用に文字列化
+                let serialized = serde_json::to_string(&saved_si).unwrap();
+
+                // JSONファイルに書き込み
+                let mut store = OpenOptions::new()
+                    .write(true)
+                    .truncate(true)
+                    .open("store.json")
+                    .unwrap();
+                store.write(serialized.as_bytes()).unwrap();
+            }
+
+            // 全件削除
+            "clear" => {
+                // JSONファイルに書き込み
+                let mut store = OpenOptions::new()
+                    .write(true)
+                    .truncate(true)
+                    .open("store.json")
+                    .unwrap();
+                store.write("".as_bytes()).unwrap();
+            }
+
             // その他
             _ => usage(),
         }
