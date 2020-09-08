@@ -1,6 +1,8 @@
 use crate::command::Command;
 use std::process;
 
+pub const END: &str = "end";
+
 pub struct End {}
 impl End {
     pub fn new() -> End {
