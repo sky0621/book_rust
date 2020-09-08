@@ -26,6 +26,6 @@ fn main() {
         // 半角スペースで分割
         let seps: Vec<&str> = input.split_ascii_whitespace().collect();
 
-        commands.exec(&seps);
+        commands.exec(seps);
     }
 }

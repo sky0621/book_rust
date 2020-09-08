@@ -24,16 +24,14 @@ impl Commands {
         commands.insert(LIST, Box::new(List::new()));
         Commands { commands }
     }
-    pub fn exec(&self, args: &Vec<&str>) {
+
+    pub fn exec(&self, args: Vec<&str>) {
         if args.len() == 0 {
             self.commands.get(HELP).unwrap().exec(vec![]);
             return;
         }
-        let cmd = args.get(0).unwrap();
-        if self.commands.contains_key(cmd) {
-            self.commands.get(cmd).unwrap().exec(args.to_vec());
-            return;
+        if let Some(cmd) = self.commands.get(args.get(0).unwrap()) {
+            cmd.exec(args)
         }
-        self.commands.get(HELP).unwrap().exec(vec![]);
     }
 }
