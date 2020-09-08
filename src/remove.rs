@@ -15,7 +15,7 @@ impl Command for Remove {
         let mut saved_si = read_store_info();
 
         // 既存分から指定された要素を削除
-        saved_si.kvs.remove(&*args.get(1).unwrap().to_string());
+        saved_si.kvs.remove(*args.get(1).unwrap());
 
         // JSONファイルに書き込み
         re_write_store(get_serialized(&saved_si));

@@ -14,7 +14,8 @@ impl Command for Get {
         // JSONファイルから既存分を取得
         let saved_si = read_store_info();
 
-        let v = saved_si.kvs.get(&*args.get(1).unwrap().to_string());
-        println!("{}", v.unwrap_or(&mut String::from("")));
+        if let Some(v) = saved_si.kvs.get(*args.get(1).unwrap()) {
+            println!("{}", v);
+        }
     }
 }

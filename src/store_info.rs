@@ -1,10 +1,11 @@
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fs::OpenOptions;
 use std::io::Write;
 use std::{fs, process};
 
-pub const STORE_FILE: &str = "store.json";
+use serde::{Deserialize, Serialize};
+
+const STORE_FILE: &str = "store.json";
 
 // アトリビュートにてJSONパーサーのシリアライズ機能を持たせる
 #[derive(Serialize, Deserialize, Debug)]
