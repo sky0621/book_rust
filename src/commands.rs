@@ -15,7 +15,7 @@ pub struct Commands {
 impl Commands {
     pub fn new() -> Commands {
         let mut commands: HashMap<&'static str, Box<dyn Command>> = HashMap::new();
-        commands.insert(END, Box::new(End::new()));
+        commands.insert(END, Box::new(End {}));
         commands.insert(HELP, Box::new(Help::new()));
         commands.insert(CLEAR, Box::new(Clear::new()));
         commands.insert(SAVE, Box::new(Save::new()));

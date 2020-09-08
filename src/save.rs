@@ -1,11 +1,9 @@
 use std::collections::HashMap;
 use std::fs;
-use std::fs::OpenOptions;
-use std::io::Write;
 
 use crate::command::Command;
-use crate::store_info::StoreInfo;
 use crate::store_info::STORE_FILE;
+use crate::store_info::{re_write_store, StoreInfo};
 
 pub const SAVE: &str = "save";
 
@@ -38,14 +36,9 @@ impl Command for Save {
         }
 
         // JSONファイル書き込み用に文字列化
-        let serialized = serde_json::to_string(&StoreInfo::new(kvs)).unwrap();
+        let serialized = serde_json::to_string(&StoreInfo { kvs }).unwrap();
 
         // JSONファイルに書き込み
-        let mut store = OpenOptions::new()
-            .write(true)
-            .truncate(true)
-            .open(STORE_FILE)
-            .unwrap();
-        store.write(serialized.as_bytes()).unwrap();
+        re_write_store(serialized);
     }
 }
