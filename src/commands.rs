@@ -20,19 +20,17 @@ impl Commands {
         commands.insert(HELP, Box::new(Help {}));
         commands.insert(CLEAR, Box::new(Clear {}));
         commands.insert(SAVE, Box::new(Save {}));
-        commands.insert(GET, Box::new(Get::new()));
+        commands.insert(GET, Box::new(Get {}));
         commands.insert(REMOVE, Box::new(Remove {}));
         commands.insert(LIST, Box::new(List {}));
         Commands { commands }
     }
 
     pub fn exec(&self, args: Vec<&str>) {
-        if args.len() == 0 {
-            self.commands.get(HELP).unwrap().exec(vec![]);
-            return;
-        }
-        if let Some(cmd) = self.commands.get(args.get(0).unwrap()) {
-            cmd.exec(args)
+        if let Some(order) = args.get(0) {
+            if let Some(cmd) = self.commands.get(order) {
+                cmd.exec(args)
+            }
         }
     }
 }

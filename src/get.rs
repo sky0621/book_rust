@@ -1,22 +1,17 @@
 use crate::command::Command;
-use crate::store_info::{StoreInfo, STORE_FILE};
-use std::fs;
+use crate::store_info::{read_store, StoreInfo};
 
 pub const GET: &str = "get";
 
 pub struct Get {}
-impl Get {
-    pub fn new() -> Get {
-        Get {}
-    }
-}
+
 impl Command for Get {
     fn exec(&self, args: Vec<&str>) {
         if args.len() != 2 {
             return;
         }
         // JSONファイルから既存分を取得
-        let previous = fs::read_to_string(STORE_FILE).unwrap();
+        let previous = read_store();
         if previous.is_empty() {
             return;
         }
