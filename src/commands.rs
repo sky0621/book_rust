@@ -12,16 +12,17 @@ use crate::save::{Save, SAVE};
 pub struct Commands {
     pub commands: HashMap<&'static str, Box<dyn Command>>,
 }
+
 impl Commands {
     pub fn new() -> Commands {
         let mut commands: HashMap<&'static str, Box<dyn Command>> = HashMap::new();
         commands.insert(END, Box::new(End {}));
-        commands.insert(HELP, Box::new(Help::new()));
-        commands.insert(CLEAR, Box::new(Clear::new()));
-        commands.insert(SAVE, Box::new(Save::new()));
+        commands.insert(HELP, Box::new(Help {}));
+        commands.insert(CLEAR, Box::new(Clear {}));
+        commands.insert(SAVE, Box::new(Save {}));
         commands.insert(GET, Box::new(Get::new()));
-        commands.insert(REMOVE, Box::new(Remove::new()));
-        commands.insert(LIST, Box::new(List::new()));
+        commands.insert(REMOVE, Box::new(Remove {}));
+        commands.insert(LIST, Box::new(List {}));
         Commands { commands }
     }
 

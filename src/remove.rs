@@ -1,24 +1,17 @@
 use crate::command::Command;
-use crate::store_info::{StoreInfo, STORE_FILE};
-use std::fs;
-use std::fs::OpenOptions;
-use std::io::Write;
+use crate::store_info::{re_write_store, read_store, StoreInfo};
 
 pub const REMOVE: &str = "remove";
 
 pub struct Remove {}
-impl Remove {
-    pub fn new() -> Remove {
-        Remove {}
-    }
-}
+
 impl Command for Remove {
     fn exec(&self, args: Vec<&str>) {
         if args.len() != 2 {
             return;
         }
         // JSONファイルから既存分を取得
-        let previous = fs::read_to_string(STORE_FILE).unwrap();
+        let previous = read_store();
         if previous.is_empty() {
             return;
         }
@@ -29,11 +22,6 @@ impl Command for Remove {
         let serialized = serde_json::to_string(&saved_si).unwrap();
 
         // JSONファイルに書き込み
-        let mut store = OpenOptions::new()
-            .write(true)
-            .truncate(true)
-            .open(STORE_FILE)
-            .unwrap();
-        store.write(serialized.as_bytes()).unwrap();
+        re_write_store(serialized);
     }
 }

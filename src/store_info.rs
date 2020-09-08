@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fs::OpenOptions;
 use std::io::Write;
-use std::process;
+use std::{fs, process};
 
 pub const STORE_FILE: &str = "store.json";
 
@@ -25,4 +25,8 @@ pub fn re_write_store(json_str: String) {
         }
     };
     file.write(json_str.as_bytes()).unwrap();
+}
+
+pub fn read_store() -> String {
+    fs::read_to_string(STORE_FILE).unwrap()
 }

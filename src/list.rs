@@ -1,19 +1,14 @@
 use crate::command::Command;
-use crate::store_info::{StoreInfo, STORE_FILE};
-use std::fs;
+use crate::store_info::{read_store, StoreInfo};
 
 pub const LIST: &str = "list";
 
 pub struct List {}
-impl List {
-    pub fn new() -> List {
-        List {}
-    }
-}
+
 impl Command for List {
     fn exec(&self, _: Vec<&str>) {
         // JSONファイルから既存分を取得
-        let previous = fs::read_to_string(STORE_FILE).unwrap();
+        let previous = read_store();
         if previous.is_empty() {
             return;
         }

@@ -1,18 +1,12 @@
 use std::collections::HashMap;
-use std::fs;
 
 use crate::command::Command;
-use crate::store_info::STORE_FILE;
-use crate::store_info::{re_write_store, StoreInfo};
+use crate::store_info::{re_write_store, read_store, StoreInfo};
 
 pub const SAVE: &str = "save";
 
 pub struct Save {}
-impl Save {
-    pub fn new() -> Save {
-        Save {}
-    }
-}
+
 impl Command for Save {
     fn exec(&self, args: Vec<&str>) {
         if args.len() != 3 {
@@ -26,7 +20,7 @@ impl Command for Save {
         );
 
         // JSONファイルから既存分を取得
-        let previous = fs::read_to_string(STORE_FILE).unwrap();
+        let previous = read_store();
         if !previous.is_empty() {
             // 既存分を今回分に続けてKVSに格納
             let saved_si: StoreInfo = serde_json::from_str(&previous).unwrap();

@@ -3,11 +3,7 @@ use crate::command::Command;
 pub const HELP: &str = "help";
 
 pub struct Help {}
-impl Help {
-    pub fn new() -> Help {
-        Help {}
-    }
-}
+
 impl Command for Help {
     fn exec(&self, _: Vec<&str>) {
         let msg = r#"
