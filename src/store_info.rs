@@ -30,3 +30,17 @@ pub fn re_write_store(json_str: String) {
 pub fn read_store() -> String {
     fs::read_to_string(STORE_FILE).unwrap()
 }
+
+pub fn read_store_info() -> StoreInfo {
+    let previous = read_store();
+    if previous.is_empty() {
+        return StoreInfo {
+            kvs: HashMap::new(),
+        };
+    }
+    serde_json::from_str(&previous).unwrap()
+}
+
+pub fn get_serialized(si: &StoreInfo) -> String {
+    serde_json::to_string(si).unwrap()
+}
