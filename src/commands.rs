@@ -2,15 +2,12 @@ use crate::command::Command;
 use crate::save::Save;
 use std::collections::HashMap;
 
-pub struct Commands<C: Command> {
-    pub commands: HashMap<String, Box<C>>,
+pub struct Commands {
+    pub commands: HashMap<String, Box<Command>>,
 }
-impl<C> Commands<C>
-where
-    C: Command,
-{
-    pub fn new() -> Commands<C> {
-        let mut commands = HashMap::new();
+impl Commands {
+    pub fn new() -> Commands {
+        let mut commands: HashMap<String, Box<Command>> = HashMap::new();
         commands.insert(String::from("save"), Box::new(Save::new()));
         Commands { commands }
     }
