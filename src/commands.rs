@@ -10,7 +10,7 @@ use crate::remove::{Remove, REMOVE};
 use crate::save::{Save, SAVE};
 
 pub struct Commands {
-    pub commands: HashMap<&'static str, Box<dyn Command>>,
+    commands: HashMap<&'static str, Box<dyn Command>>,
 }
 
 impl Commands {
