@@ -1,6 +1,6 @@
 use std::io::stdin;
 
-use crate::store_info::{re_write_store, StoreInfo};
+use crate::store_info::{write_store, StoreInfo};
 
 mod clear;
 mod command;
@@ -29,5 +29,5 @@ fn main() {
             break;
         }
     }
-    re_write_store(&si);
+    write_store(&si);
 }

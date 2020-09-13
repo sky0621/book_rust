@@ -36,7 +36,7 @@ impl StoreInfo {
     }
 }
 
-pub fn re_write_store(si: &StoreInfo) {
+pub fn write_store(si: &StoreInfo) {
     let json_str = serde_json::to_string(si).unwrap();
 
     let mut file = OpenOptions::new()
