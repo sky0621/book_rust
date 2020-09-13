@@ -14,8 +14,7 @@ mod store_info;
 
 fn main() {
     let mut si = StoreInfo::new();
-    let mut next = true;
-    while next {
+    loop {
         let mut input = String::new();
 
         // 標準入力から input へ
@@ -26,7 +25,9 @@ fn main() {
         // 半角スペースで分割
         let seps: Vec<&str> = input.split_ascii_whitespace().collect();
 
-        next = command::exec(seps, &mut si);
+        if !command::exec(seps, &mut si) {
+            break;
+        }
     }
     re_write_store(&si);
 }
