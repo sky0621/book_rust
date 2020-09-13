@@ -1,12 +1,11 @@
-use crate::command::Command;
 use std::process;
 
-pub const END: &str = "end";
+use crate::command::Command;
 
 pub struct End {}
 
 impl Command for End {
-    fn exec(&self, _: Vec<&str>) {
+    fn exec(&self) {
         println!("End");
         process::exit(0);
     }

@@ -1,12 +1,10 @@
 use crate::command::Command;
 use crate::store_info::read_store_info;
 
-pub const LIST: &str = "list";
-
 pub struct List {}
 
 impl Command for List {
-    fn exec(&self, _: Vec<&str>) {
+    fn exec(&self) {
         // JSONファイルから既存分を取得
         let saved_si = read_store_info();
 

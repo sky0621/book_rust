@@ -1,6 +1,6 @@
 use std::io::stdin;
 
-use crate::commands::Commands;
+use crate::store_info::init_store;
 
 mod clear;
 mod command;
@@ -9,12 +9,13 @@ mod end;
 mod get;
 mod help;
 mod list;
+mod no_ope;
 mod remove;
 mod save;
 mod store_info;
 
 fn main() {
-    let commands: Commands = Commands::new();
+    init_store();
     loop {
         let mut input = String::new();
 
@@ -26,6 +27,6 @@ fn main() {
         // 半角スペースで分割
         let seps: Vec<&str> = input.split_ascii_whitespace().collect();
 
-        commands.exec(seps);
+        commands::exec(seps);
     }
 }
