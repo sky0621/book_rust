@@ -1,15 +1,20 @@
-use std::process;
+use std::collections::HashMap;
 
 use crate::command::Command;
-use crate::store_info::re_write_store;
+use crate::store_info::StoreInfo;
 
-pub struct Clear {}
+pub struct Clear<'a> {
+    si: &'a mut StoreInfo,
+}
 
-impl Command for Clear {
-    fn exec(&self) {
-        re_write_store(String::from("")).unwrap_or_else(|e| {
-            eprintln!("{:#?}", e);
-            process::exit(-1);
-        });
+impl<'a> Clear<'a> {
+    pub fn new(si: &'a mut StoreInfo) -> Clear<'a> {
+        Clear { si }
+    }
+}
+
+impl<'a> Command for Clear<'a> {
+    fn exec(&mut self, _: Vec<&str>) {
+        self.si.kvs = HashMap::new();
     }
 }

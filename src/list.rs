@@ -1,14 +1,19 @@
 use crate::command::Command;
-use crate::store_info::read_store_info;
+use crate::store_info::StoreInfo;
 
-pub struct List {}
+pub struct List<'a> {
+    si: &'a mut StoreInfo,
+}
 
-impl Command for List {
-    fn exec(&self) {
-        // JSONファイルから既存分を取得
-        let saved_si = read_store_info();
+impl<'a> List<'a> {
+    pub fn new(si: &'a mut StoreInfo) -> List<'a> {
+        List { si }
+    }
+}
 
-        for (k, v) in saved_si.kvs {
+impl<'a> Command for List<'a> {
+    fn exec(&mut self, _: Vec<&str>) {
+        for (k, v) in &self.si.kvs {
             println!("{{ {}, {} }}", k, v);
         }
     }

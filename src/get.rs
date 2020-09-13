@@ -1,30 +1,24 @@
 use crate::command::Command;
-use crate::store_info::read_store_info;
+use crate::store_info::StoreInfo;
 
-pub struct Get {
-    key: String,
+pub struct Get<'a> {
+    si: &'a mut StoreInfo,
 }
 
-impl Get {
-    pub fn new(args: Vec<&str>) -> Get {
-        if args.len() != 2 {
-            return Get {
-                key: "".to_string(),
-            };
-        }
-        Get {
-            key: args.get(1).unwrap().to_string(),
-        }
+impl<'a> Get<'a> {
+    pub fn new(si: &'a mut StoreInfo) -> Get<'a> {
+        Get { si }
     }
 }
 
-impl Command for Get {
-    fn exec(&self) {
-        // JSONファイルから既存分を取得
-        let saved_si = read_store_info();
-
-        if let Some(v) = saved_si.kvs.get(&self.key) {
+impl<'a> Command for Get<'a> {
+    fn exec(&mut self, args: Vec<&str>) {
+        if args.len() != 2 {
+            return;
+        }
+        let key = args.get(1).unwrap_or(&&"").clone();
+        if let Some(v) = self.si.kvs.get(key) {
             println!("{}", v);
-        };
+        }
     }
 }

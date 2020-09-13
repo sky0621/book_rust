@@ -1,22 +1,21 @@
 use std::io::stdin;
 
-use crate::store_info::init_store;
+use crate::store_info::{re_write_store, StoreInfo};
 
 mod clear;
 mod command;
-mod commands;
 mod end;
 mod get;
 mod help;
 mod list;
-mod no_ope;
 mod remove;
 mod save;
 mod store_info;
 
 fn main() {
-    init_store();
-    loop {
+    let mut si = StoreInfo::new();
+    let mut next = true;
+    while next {
         let mut input = String::new();
 
         // 標準入力から input へ
@@ -27,6 +26,7 @@ fn main() {
         // 半角スペースで分割
         let seps: Vec<&str> = input.split_ascii_whitespace().collect();
 
-        commands::exec(seps);
+        next = command::exec(seps, &mut si);
     }
+    re_write_store(&si);
 }
