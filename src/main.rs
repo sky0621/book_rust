@@ -1,9 +1,11 @@
 use std::io::stdin;
 
-use crate::store_info::{write_store, StoreInfo};
+use crate::commands::run;
+use crate::store_info::StoreInfo;
 
 mod clear;
 mod command;
+mod commands;
 mod end;
 mod get;
 mod help;
@@ -25,9 +27,6 @@ fn main() {
         // 半角スペースで分割
         let seps: Vec<&str> = input.split_ascii_whitespace().collect();
 
-        if !command::exec(seps, &mut si) {
-            break;
-        }
+        run(seps, &mut si);
     }
-    write_store(&si);
 }
