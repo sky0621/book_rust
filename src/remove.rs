@@ -13,10 +13,8 @@ impl<'a> Remove<'a> {
 
 impl<'a> Command for Remove<'a> {
     fn exec(&mut self, args: Vec<&str>) {
-        if args.len() != 2 {
-            return;
+        if let Some(key) = args.get(1) {
+            self.si.kvs.remove(key.clone());
         }
-        let key = args.get(1).unwrap_or(&&"").clone();
-        self.si.kvs.remove(key);
     }
 }

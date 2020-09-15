@@ -15,8 +15,12 @@ mod save;
 mod store_info;
 
 fn main() {
+    // オンメモリ用のキーバリューストア
+    // 前回アプリ起動時の読み書き情報をJSONファイルから読み込む。
     let mut si = StoreInfo::new();
+
     loop {
+        // 標準入力の受け皿
         let mut input = String::new();
 
         // 標準入力から input へ

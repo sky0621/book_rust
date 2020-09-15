@@ -13,12 +13,13 @@ impl<'a> Get<'a> {
 
 impl<'a> Command for Get<'a> {
     fn exec(&mut self, args: Vec<&str>) {
-        if args.len() != 2 {
-            return;
-        }
-        let key = args.get(1).unwrap_or(&&"").clone();
-        if let Some(v) = self.si.kvs.get(key) {
-            println!("{}", v);
+        if let Some(key) = args.get(1) {
+            // clone() しないと以下のようにRustコンパイラに怒られるが、理屈がわかっていない。
+            // 頻繁に出会うコンパイルエラーの内容はそのうちまとめてみよう。
+            // 「[E0277]: the trait bound `std::string::String: std::borrow::Borrow<&str>` is not satisfied」
+            if let Some(v) = self.si.kvs.get(key.clone()) {
+                println!("{}", v);
+            }
         }
     }
 }

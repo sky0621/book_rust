@@ -13,11 +13,8 @@ impl<'a> Save<'a> {
 
 impl<'a> Command for Save<'a> {
     fn exec(&mut self, args: Vec<&str>) {
-        if args.len() != 3 {
-            return;
+        if let (Some(key), Some(val)) = (args.get(1), args.get(2)) {
+            self.si.kvs.insert(key.to_string(), val.to_string());
         }
-        let key = args.get(1).unwrap_or(&&"").to_string();
-        let val = args.get(2).unwrap_or(&&"").to_string();
-        self.si.kvs.insert(key, val);
     }
 }
