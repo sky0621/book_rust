@@ -1,4 +1,5 @@
 # book_rust
+
 ## Env
 ```
 $ rustc --version
